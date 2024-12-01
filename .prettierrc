@@ -3,5 +3,6 @@
   "trailingComma": "all",
   "bracketSpacing": false,
   "semi": false,
-  "endOfLine": "crlf"
+  "endOfLine": "crlf",
+  "printWidth": 100
 }
