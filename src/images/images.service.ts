@@ -1,20 +1,12 @@
 import {Injectable} from '@nestjs/common'
-import {CreateImageDto} from './dto/create-image.dto'
 import {PrismaService} from 'src/prisma/prisma.service'
+import * as path from 'path'
 
 @Injectable()
 export class ImagesService {
-  constructor(private readonly prismaService: PrismaService) {}
+  private readonly uploadDir = path.join(__dirname, '../../uploads')
 
-  async create(dto: CreateImageDto) {
-    return await this.prismaService.image.create({
-      data: {
-        ...dto,
-        originalUrl: '',
-        thumbnailUrl: '',
-      },
-    })
-  }
+  constructor(private readonly prismaService: PrismaService) {}
 
   async findAll(page: number, limit: number) {
     return await this.prismaService.image.findMany({
