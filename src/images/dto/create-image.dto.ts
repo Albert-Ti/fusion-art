@@ -1,6 +1,6 @@
 import {ApiProperty} from '@nestjs/swagger'
 import {IsString} from 'class-validator'
-import {ImageStyles} from 'src/types'
+import {EnumStyles} from 'src/types'
 
 export class CreateImageDto {
   @ApiProperty({example: 'Море', description: 'Описание изображения'})
@@ -9,5 +9,5 @@ export class CreateImageDto {
 
   @ApiProperty({example: 'ANIME', description: 'Стиль изображения'})
   @IsString()
-  style: ImageStyles
+  style: EnumStyles
 }
