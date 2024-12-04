@@ -1,8 +1,15 @@
-export enum ImageStyles {
+export enum EnumStyles {
   DEFAULT = 'DEFAULT',
   ANIME = 'ANIME',
   KANDINSKY = 'KANDINSKY',
   UHD = 'UHD',
+}
+
+export enum EnumStatus {
+  INITIAL = 'INITIAL',
+  PROCESSING = 'PROCESSING',
+  DONE = 'DONE',
+  FAIL = 'FAIL',
 }
 
 export type ImageConfig = {
@@ -12,23 +19,23 @@ export type ImageConfig = {
   negative?: string
 }
 
+export type ModelResponse = {
+  id: number
+  name: string
+  version: number
+  type: number
+}
+
 export type TaskResponse = {
-  status: string
+  status: EnumStatus
   uuid: string
   status_time: string
 }
 
 export type TaskStatusResponse = {
   uuid: string
-  status: string
+  status: EnumStatus
   images: string[]
   errorDescription: string
   censored: boolean
-}
-
-export type ModelResponse = {
-  id: number
-  name: string
-  version: number
-  type: number
 }
