@@ -17,8 +17,8 @@ export class ImagesController {
 
   @ApiOperation({summary: 'Проверить статус изображения'})
   @Get(':id')
-  async checkImage(@Param('id') id: string) {
-    return await this.imagesService.checkImage(+id)
+  async check(@Param('id') id: string) {
+    return await this.imagesService.check(+id)
   }
 
   @ApiOperation({summary: 'Получение списка миниатюр'})

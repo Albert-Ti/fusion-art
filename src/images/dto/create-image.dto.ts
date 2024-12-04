@@ -7,7 +7,7 @@ export class CreateImageDto {
   @IsString()
   prompt: string
 
-  @ApiProperty({example: 'ANIME', description: 'Стиль изображения'})
+  @ApiProperty({example: 'KANDINSKY', description: 'Стиль изображения'})
   @IsString()
   style: EnumStyles
 }

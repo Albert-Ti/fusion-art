@@ -1,10 +1,10 @@
 import {Injectable} from '@nestjs/common'
+import * as fs from 'fs'
 import * as path from 'path'
-import {FusionBrainService} from 'src/fusion-brain/fusion-brain.service'
 import {PrismaService} from 'src/prisma/prisma.service'
 import {EnumStatus} from 'src/types'
 import {CreateImageDto} from './dto/create-image.dto'
-import * as fs from 'fs'
+import {FusionBrainApiService} from 'src/fusion-brain-api/fusion-brain-api.service'
 
 @Injectable()
 export class ImagesService {
@@ -12,19 +12,19 @@ export class ImagesService {
 
   constructor(
     private readonly prismaService: PrismaService,
-    private readonly fusionBrainService: FusionBrainService,
+    private readonly fusionBrainApiService: FusionBrainApiService,
   ) {}
 
   async create(dto: CreateImageDto) {
-    const model = await this.fusionBrainService.getModel()
-    const uuid = await this.fusionBrainService.generate(dto.prompt, dto.style, model)
+    const model = await this.fusionBrainApiService.getModel()
+    const uuid = await this.fusionBrainApiService.generate(dto.prompt, dto.style, model)
 
     const createdImage = await this.prismaService.image.create({
       data: {...dto, uuid, status: EnumStatus.PROCESSING},
     })
 
     try {
-      const data = await this.fusionBrainService.checkGeneration(uuid)
+      const data = await this.fusionBrainApiService.checkGeneration(uuid)
       this.decodeAndSaveImage(data.images[0], uuid)
 
       await this.prismaService.image.update({
@@ -39,12 +39,15 @@ export class ImagesService {
     }
   }
 
-  async checkImage(id: number) {
+  async check(id: number) {
     return await this.prismaService.image.findUnique({where: {id}})
   }
 
   async findAll(page: number, limit: number) {
-    return await this.prismaService.image.findMany({})
+    return await this.prismaService.image.findMany({
+      skip: page,
+      take: limit,
+    })
   }
 
   decodeAndSaveImage(base64Image: string, uuid: string) {
