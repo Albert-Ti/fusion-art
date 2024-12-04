@@ -1,0 +1,42 @@
+name: fusion-art
+services:
+  backend:
+    container_name: fusion-art_backend
+    build:
+      context: .
+      target: ${MODE:-dev}
+    ports:
+      - 3000:3000
+    env_file:
+      - .env
+    depends_on:
+      - postgres
+      - minio
+
+  postgres:
+    container_name: fusion-art_postgres
+    image: postgres:latest
+    ports:
+      - 5432:5432
+    env_file:
+      - .env
+    volumes:
+      - db-data:/var/lib/postgresql/data
+    restart: always
+
+  minio:
+    container_name: fusion-art_minio
+    image: minio/minio:latest
+    command: server /data --console-address ":9001"
+    ports:
+      - 9000:9000
+      - 9001:9001
+    env_file:
+      - .env
+    volumes:
+      - minio-data:/data
+    restart: always
+
+volumes:
+  minio-data: {}
+  db-data: {}
