@@ -73,7 +73,7 @@ export class ImagesService {
     }
   }
 
-  async filterImage({page, limit}) {
+  async getThumbnails({page, limit}) {
     const skip = (+page - 1) * +limit
     const take = +limit
     try {

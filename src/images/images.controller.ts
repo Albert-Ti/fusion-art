@@ -18,8 +18,8 @@ export class ImagesController {
 
   @ApiOperation({summary: 'Получение списка миниатюр'})
   @Get()
-  async filterImage(@Query() query: FilterImageDto) {
-    return await this.imagesService.filterImage(query)
+  async getThumbnails(@Query() query: FilterImageDto) {
+    return await this.imagesService.getThumbnails(query)
   }
 
   @ApiOperation({summary: 'Получить изображение по типу'})
