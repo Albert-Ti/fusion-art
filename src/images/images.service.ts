@@ -73,11 +73,18 @@ export class ImagesService {
     }
   }
 
-  async filterImage(page: number, limit: number) {
-    return await this.prismaService.image.findMany({
-      skip: page,
-      take: limit,
-    })
+  async filterImage({page, limit}) {
+    const skip = (+page - 1) * +limit
+    const take = +limit
+    try {
+      return await this.prismaService.image.findMany({
+        skip,
+        take,
+        select: {id: true, thumbnail_url: true},
+      })
+    } catch (e) {
+      throw new BadRequestException(`Не удалось получить список миниатюр ${e}`)
+    }
   }
 
   async uploadImages(uuid: string, buffer: Buffer, bucketName: string) {
