@@ -12,6 +12,11 @@ export enum EnumStatus {
   FAIL = 'FAIL',
 }
 
+export enum EnumTypeImage {
+  ORIGINAL = 'ORIGINAL',
+  THUMBNAIL = 'THUMBNAIL',
+}
+
 export type ImageConfig = {
   count?: number
   width?: number
