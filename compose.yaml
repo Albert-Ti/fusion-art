@@ -1,9 +1,10 @@
 name: fusion-art
 services:
   backend:
-    container_name: fusion-art_backend
+    container_name: backend
     build:
       context: .
+      # MODE=[dev | prod] docker compose up -d --build. По умолчанию задан prod
       target: ${MODE:-dev}
     ports:
       - 3000:3000
@@ -14,7 +15,7 @@ services:
       - minio
 
   postgres:
-    container_name: fusion-art_postgres
+    container_name: postgres
     image: postgres:latest
     ports:
       - 5432:5432
@@ -25,7 +26,7 @@ services:
     restart: always
 
   minio:
-    container_name: fusion-art_minio
+    container_name: minio
     image: minio/minio:latest
     command: server /data --console-address ":9001"
     ports:
@@ -36,6 +37,11 @@ services:
     volumes:
       - minio-data:/data
     restart: always
+
+  adminer:
+    image: adminer
+    ports:
+      - 8080:8080
 
 volumes:
   minio-data: {}
