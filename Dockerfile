@@ -7,15 +7,13 @@ FROM base AS dev
 RUN --mount=type=bind,source=package.json,target=package.json \
     --mount=type=bind,source=package-lock.json,target=package-lock.json \
     --mount=type=cache,target=/root/.npm \
-    npm ci --no-audit --no-fund \
-    npx prisma generate
+    npm ci --no-audit --no-fund
 COPY . .
-ENTRYPOINT ["sh", "-c", "npm run start:dev" ]
+ENTRYPOINT ["sh", "-c", "npx prisma generate && npm run start:dev" ]
 
 FROM base AS build
 COPY . .
-RUN npm ci --include=dev \
-    npx prisma generate
+RUN npm ci --include=dev 
 RUN npm run build
 
 FROM base AS prod
@@ -23,4 +21,4 @@ COPY --from=build /app/dist ./dist
 COPY --from=build /app/package*.json ./
 COPY --from=build /app/prisma ./prisma
 RUN npm ci --include=dev 
-ENTRYPOINT ["sh", "-c", "npm run start:prod"]
+ENTRYPOINT ["sh", "-c", "npx prisma generate && npm run start:prod"]
