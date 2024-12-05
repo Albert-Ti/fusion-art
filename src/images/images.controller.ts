@@ -2,6 +2,7 @@ import {Body, Controller, Get, Param, Post, Query} from '@nestjs/common'
 import {ApiOperation, ApiTags} from '@nestjs/swagger'
 import {CreateImageDto} from './dto/create-image.dto'
 import {FilterImageDto} from './dto/filter-image.dto'
+import {GetImageDto} from './dto/get-image.dto'
 import {ImagesService} from './images.service'
 
 @ApiTags('Изображения')
@@ -15,15 +16,15 @@ export class ImagesController {
     return await this.imagesService.create(dto)
   }
 
-  @ApiOperation({summary: 'Проверить статус изображения'})
-  @Get(':id')
-  async check(@Param('id') id: string) {
-    return await this.imagesService.check(+id)
-  }
-
   @ApiOperation({summary: 'Получение списка миниатюр'})
   @Get()
-  findAll(@Query() {page = 1, limit = 10}: FilterImageDto) {
-    return this.imagesService.findAll(page, limit)
+  async filterImage(@Query() {page = 1, limit = 10}: FilterImageDto) {
+    return await this.imagesService.filterImage(page, limit)
+  }
+
+  @ApiOperation({summary: 'Получить изображение по типу'})
+  @Get(':id')
+  async getImageByType(@Param('id') id: string, @Query() {type}: GetImageDto) {
+    return await this.imagesService.getImageByType(id, type)
   }
 }
